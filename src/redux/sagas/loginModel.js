@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { handleAction, createAction } from 'redux-actions';
 
 import * as Apis from '../../constants/apiConstants';
@@ -54,5 +54,5 @@ function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
 }
 
 export function* watchLaunchLoginRequest() {
-    yield takeEvery(loginRequestAction, launchLoginRequest);
+    yield takeLatest(loginRequestAction, launchLoginRequest);
 }
