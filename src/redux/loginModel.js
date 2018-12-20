@@ -1,37 +1,13 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import { handleAction, createAction } from 'redux-actions';
 
-import * as Apis from '../../constants/apiConstants';
-import { kParams_ResponseCode, kParams_ServiceCode } from "../../constants/dominConstants";
-import { launchPOSTRequest } from '../../util/request';
+import * as Apis from '../constants/apiConstants';
+import { kParams_ResponseCode, kParams_ServiceCode } from "../constants/dominConstants";
+import { launchPOSTRequest } from '../util/request';
 
 export const loginRequestAction = createAction('login/launchLoginRequest');
-export const loginStore = handleAction(
-    'loginSuccessed',
-    (state, { payload: result }) => {
-        debugger;
-        return {
-            ...state,
-            loginState: 1,
-            username: result.username,
-            accesstoken: result.accesstoken,
-            userid: result.userid,
-            refreshtoken: result.refreshtoken,
-            portrait: result.portrait
-        }
-    },
-    {
-        loginState: 0,
-        username: '',
-        accesstoken: '',
-        userid: '',
-        refreshtoken: '',
-        portrait: ''
-    }
-);
 
 function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
-    debugger;
     const params = {
         accountname,
         passwd
@@ -45,14 +21,47 @@ function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
         window.localStorage.setItem("user", JSON.stringify(response.responseData.result));
 
         yield put({ type: 'loginSuccessed', payload: response.responseData.result });
-        // router.push(PathConstants.kAnalysisPath.path);
         console.log('登录成功');
     } else {
-        // message.error(response.msg);
         console.error('登录失败');
     }
 }
-
 export function* watchLaunchLoginRequest() {
     yield takeLatest(loginRequestAction, launchLoginRequest);
 }
+
+let user = window.localStorage.getItem("user");
+if (user) {
+    user = JSON.parse(user);
+} else {
+    user = {};
+}
+
+/* 
+    loginResult有五个字段
+    username
+    accesstoken
+    userid
+    refreshtoken
+    portrait
+*/
+export const loginStore = handleAction(
+    'loginSuccessed',
+    (state, { payload: loginResult }) => {
+        return {
+            ...state,
+            loginState: 1,
+            ...loginResult
+        }
+    },
+    {
+        loginState: user.status || 0,
+        username: user.username || '',
+        accesstoken: user.accesstoken || '',
+        userid: user.userid || '',
+        refreshtoken: user.refreshtoken || '',
+        portrait: user.portrait || '',
+    }
+);
+
+

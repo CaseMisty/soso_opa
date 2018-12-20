@@ -3,11 +3,11 @@ import {
     Form, Icon, Input, Button, Checkbox,
 } from 'antd';
 import { connect } from 'react-redux';
-import { changeNavBarActiveIdx } from '../redux/action/navBar';
-import { loginRequestAction } from '../redux/sagas/loginModel';
+import { Redirect } from 'react-router-dom';
+import { loginRequestAction } from '../redux/loginModel';
+import * as PathConstants from '../constants/routeConstants';
 
 const FormItem = Form.Item;
-
 class LoginController extends React.Component {
     componentDidMount() {
 
@@ -20,18 +20,25 @@ class LoginController extends React.Component {
                 this.props.login(values.username, values.password);
             }
         });
-        // this.props.changeActiveIdx(this.props.activeIdx + 1);
     };
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
+        if (this.props.loginState) {
+            const beforePathname = this.props.location.pathname;
+            let redirectPathname;
+            if (beforePathname === '/' || !beforePathname) {
+                redirectPathname = PathConstants.kUserlistPath.path;
+            } else {
+                redirectPathname = beforePathname;
+            }
+            return <Redirect to={redirectPathname}/>
+        }
         return (
             <div className="flexDiv" style={{
                 display: 'flex',
                 width: '100vw',
                 height: '100vh',
-                // backgroundColor: 'yellow',
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
@@ -55,12 +62,10 @@ class LoginController extends React.Component {
                         <div style={{
                             display: 'flex',
                             flexDirection: 'row',
-                            alignItems: 'center',
-                            // justifyContent: 'center'
+                            alignItems: 'center'
                         }}>
                             <div style={{
-                                width: '50%',
-                                // backgroundColor: 'yellow'
+                                width: '50%'
                             }}>
                                 {getFieldDecorator('remember', {
                                     valuePropName: 'checked',
@@ -72,8 +77,7 @@ class LoginController extends React.Component {
                             <div style={{
                                 display: 'flex',
                                 width: '50%',
-                                justifyContent: 'flex-end',
-                                // backgroundColor: 'green'
+                                justifyContent: 'flex-end'
                             }}>
                                 <a className="login-form-forgot" href="">忘记密码</a>
                             </div>
@@ -87,20 +91,14 @@ class LoginController extends React.Component {
         );
     }
 }
-const mapStateToProps = (state) => ({
-    activeIdx: state.navBarStore.activeIdx
-});
+const mapStateToProps = ({ loginStore: { loginState } }) => {
+    return {
+        loginState
+    };
+};
 const mapDispatchToProps = (dispatch) => ({
     login(accountname, passwd) {
         dispatch(loginRequestAction({ accountname, passwd }));
-        // dispatch({
-        //     type: `login/launchLoginRequest`,
-        //     accountname,
-        //     passwd
-        // });
-    },
-    changeActiveIdx(idx) {
-        dispatch(changeNavBarActiveIdx(idx));
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginController));

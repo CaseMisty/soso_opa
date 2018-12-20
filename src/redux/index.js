@@ -1,14 +1,18 @@
+import { all } from 'redux-saga/effects';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import rootSaga from './sagas';
+import { watchLaunchLoginRequest } from './loginModel';
+import { loginStore } from './loginModel'
 
-import { navBarStore } from './reducer/navBar';
-import { loginStore } from './sagas/loginModel'
+function *rootSaga() {
+  yield all([
+    watchLaunchLoginRequest()
+  ]);
+}
 
 const rootReducer = combineReducers({
-  navBarStore,
   loginStore
 });
 

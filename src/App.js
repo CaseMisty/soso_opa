@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Button } from 'antd';
 import {
   Route,
-  Switch,
-  Redirect
+  Switch
 } from 'react-router-dom';
-import LoginController from '../src/page/loginController.js';
+import LoginController from '../src/page/loginController';
+import BackgroundController from '../src/page/backgroundController';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
-        <Button type="primary">Button</Button>
-        </header> */}
-        <Route path='/' component={LoginController} />;
+        <Switch>
+          <Route path='/' exact component={LoginController} />
+          <Route path='/:rootPath' component={BackgroundController} />
+        </Switch>
       </div>
     );
   }

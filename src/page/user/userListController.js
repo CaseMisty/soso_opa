@@ -3,10 +3,10 @@ import {
     Table,
     Button
 } from 'antd';
-import { connect } from 'dva';
-import {Layout} from "antd/lib/index";
+import { connect } from 'react-redux';
+import { Layout } from "antd/lib/index";
 import LLCDateHelper from "../../util/dateHelper";
-import router from "umi/router";
+// import router from "umi/router";
 import * as PathConstants from "../../constants/routeConstants";
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -14,13 +14,13 @@ const namespace = 'userlist';
 
 const mapStateToProps = (state) => {
     const userinfoData = state[namespace];
-    return {
-        loading: userinfoData.loading,
-        userList: userinfoData.userList,
-        pagesize: userinfoData.pagesize,
-        totalpage: userinfoData.totalpage,
-        page: userinfoData.totalpage
-    };
+    // return {
+    //     loading: userinfoData.loading,
+    //     userList: userinfoData.userList,
+    //     pagesize: userinfoData.pagesize,
+    //     totalpage: userinfoData.totalpage,
+    //     page: userinfoData.totalpage
+    // };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -39,9 +39,7 @@ const mapDispatchToProps = (dispatch) => {
         }
     };
 };
-
-@connect(mapStateToProps, mapDispatchToProps)
-export default class LoginController extends React.Component {
+class LoginController extends React.Component {
     constructor(props) {
         super(props);
 
@@ -161,9 +159,9 @@ export default class LoginController extends React.Component {
 
     detailTapped(user) {
         this.props.selectUser(user);
-        router.push({
-            pathname: PathConstants.kUserinfoPath.path
-        });
+        // router.push({
+        //     pathname: PathConstants.kUserinfoPath.path
+        // });
     }
 
     render() {
@@ -173,17 +171,19 @@ export default class LoginController extends React.Component {
                 </div>
                 <Table
                     rowKey={record => record.userid}
-                    loading={this.props.loading}
+                    // loading={this.props.loading}
                     columns={this.columns}
-                    dataSource={this.props.userList}
+                    // dataSource={this.props.userList}
                     scroll={{ x: 805, y: 460 }}
                     pagination={{
-                        total: this.props.totalpage*this.props.pagesize,
-                        pageSize: this.props.pagesize,
-                        current: this.props.page
+                        // total: this.props.totalpage*this.props.pagesize,
+                        // pageSize: this.props.pagesize,
+                        // current: this.props.page
                     }}
                 />
             </div>
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginController);
