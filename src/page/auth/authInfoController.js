@@ -2,13 +2,14 @@ import React from 'react';
 import { Card, Col, Row, Tag, Affix } from 'antd';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/authModel';
+import '../../style/auth.css';
 
 const namespace = 'authlist';
 
 const mapStateToProps = (state) => {
     const authinfoData = state[namespace];
     return {
-        selectedAuth: authinfoData.selectedAuth,
+        // selectedAuth: authinfoData.selectedAuth,
         changePending: authinfoData.changePending
     };
 };
@@ -16,7 +17,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         queryChangePending: (userid) => {
-            dispatch(actions.queryChangePending({ userid}));
+            dispatch(actions.queryChangePending({ userid }));
+        },
+        selectAuth: (auth) => {
+            dispatch(actions.selectedAuth({ auth }));
         }
     };
 };
@@ -30,6 +34,11 @@ class AuthInfoController extends React.Component {
     }
 
     componentDidMount() {
+        this.props.selectAuth(this.props.selectedAuth);
+        this.props.queryChangePending(this.props.selectedAuth.userid);
+    }
+
+    componentDidUpdate() {
         this.props.queryChangePending(this.props.selectedAuth.userid);
     }
 
@@ -44,7 +53,8 @@ class AuthInfoController extends React.Component {
             >
                 <Card
                     hoverable
-                    style={{width: 450, marginTop: 25}}
+                    className="card"
+                    // style={{ width: 450, marginTop: 25 }}
                     title="联系方式"
                 >
                     <div style={{
@@ -76,7 +86,8 @@ class AuthInfoController extends React.Component {
                     this.props.selectedAuth.authtype === 3 ?
                         <Card
                             hoverable
-                            style={{width: 450, marginTop: 30}}
+                            className="card"
+                            // style={{ width: 450, marginTop: 30 }}
                             title="公司信息"
                         >
                             <div style={{
@@ -109,7 +120,8 @@ class AuthInfoController extends React.Component {
 
                 <Card
                     hoverable
-                    style={{width: 450, marginTop: 30}}
+                    className="card"
+                    // style={{ width: 450, marginTop: 30 }}
                     title="联系人信息"
                 >
                     <div style={{
@@ -170,7 +182,8 @@ class AuthInfoController extends React.Component {
 
                 <Card
                     hoverable
-                    style={{width: 450, marginTop: 25}}
+                    className="card"
+                    // style={{ width: 450, marginTop: 25 }}
                     title="银行卡信息"
                 >
                     <div style={{
@@ -224,7 +237,7 @@ class AuthInfoController extends React.Component {
                 break;
         }
 
-        return {color, text};
+        return { color, text };
     }
 
     pickStateInfo() {
@@ -277,7 +290,7 @@ class AuthInfoController extends React.Component {
                 break;
         }
 
-        return {color, text};
+        return { color, text };
     }
 
     render() {
@@ -287,56 +300,32 @@ class AuthInfoController extends React.Component {
         if (this.props.selectedAuth) {
             return (
                 <div
-                    style={{
-                        height: '90vh',
-                    }}
-                    className="scrollable-container"
+                    className="scrollable-container authinfo"
                     ref={(node) => { this.container = node; }}
                 >
                     <div style={{
                         display: 'flex',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        marginBottom: '15px'
                     }}>
                         <Tag
-                            style={{
-                                // marginLeft: 25,
-                                width: 80,
-                                height: 30,
-                                fontSize: 20,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
+                            className="main-tag"
                             color={typeInfo.color}
                         >{typeInfo.text}</Tag>
 
                         <Tag
-                            style={{
-                                marginLeft: 10,
-                                marginTop: 8
-                            }}
+                            className="sub-tag"
                             color={stateInfo.color}
                         >{stateInfo.text}</Tag>
                     </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        marginBottom: 50
-                    }}>
-                    <div
-                        style={{
-                            width: 450
-                        }}
-                    >
-                        {
-                            this.renderLeft()
-                        }
-                    </div>
+                    <div className="auth-modal-body">
+                        <div className="auth-modal-body-column">
+                            {this.renderLeft()}
+                        </div>
 
-                    <div style={{width: 450, marginLeft: 50, backgroundColor: 'yellow'}}>
+                        <div className="auth-modal-body-column" style={{ backgroundColor: 'yellow' }}>
+                        </div>
                     </div>
-                </div>
                 </div>
             );
         } else {

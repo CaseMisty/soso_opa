@@ -6,11 +6,6 @@ import { kParams_ResponseCode, kParams_ServiceCode } from "../constants/dominCon
 import { launchPOSTRequest } from "../util/request";
 import * as Apis from '../constants/apiConstants';
 
-let selectedAuth = window.localStorage.getItem("selectedAuth");
-if (selectedAuth) {
-    selectedAuth = JSON.parse(selectedAuth);
-}
-
 export const actions = {
     queryAuthInfo: createAction('queryAuthInfo'),
     updateAuthToPass: createAction('updateAuthToPass'),
@@ -56,7 +51,6 @@ const effects = {
             response.responseData.succ === kParams_ResponseCode.success &&
             response.responseData.result.status === kParams_ServiceCode.Successed
         ) {
-            // yield put(recordAuthList(response.responseData.result));
             yield put(loadingChanged({ loading: false }));
         } else {
             yield put(loadingChanged({ loading: false }));
@@ -76,7 +70,6 @@ const effects = {
             response.responseData.succ === kParams_ResponseCode.success &&
             response.responseData.result.status === kParams_ServiceCode.Successed
         ) {
-            // yield put(recordAuthList(response.responseData.result));
             yield put(loadingChanged({ loading: false }));
         } else {
             yield put(loadingChanged({ loading: false }));
@@ -104,8 +97,6 @@ const effects = {
         }
     },
     *selectedAuth({ payload }) {
-        debugger
-        window.localStorage.setItem("selectedAuth", JSON.stringify(payload.auth));
         yield put({ type: 'recordSelectedAuth', payload: payload.auth });
     }
 }
@@ -168,10 +159,7 @@ export const authlist = handleActions(
         authstage: 99,
         officialauth: 99,
 
-        selectedAuth: selectedAuth ? selectedAuth : undefined,
+        selectedAuth: undefined,
         changePending: {}
     }
 );
-function onStateChange(state) {
-    console.log(state, '改变state');
-}

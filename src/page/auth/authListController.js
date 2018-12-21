@@ -2,12 +2,13 @@ import React from 'react';
 import {
     Table,
     Button,
-    Tag
+    Tag,
+    Modal,
+    Input
 } from 'antd';
 import { connect } from 'react-redux';
 import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
-import NoteView from '../../view/noteView';
 import { actions } from '../../redux/authModel';
 import AuthInfoController from './authInfoController';
 
@@ -16,7 +17,6 @@ const namespace = 'authlist';
 const mapStateToProps = (state) => {
     const authinfoData = state[namespace];
     return {
-        loading: authinfoData.loading,
         authList: authinfoData.authList,
         pagesize: authinfoData.pagesize,
         totalpage: authinfoData.totalpage,
@@ -34,9 +34,6 @@ const mapDispatchToProps = (dispatch) => {
                 authstage,
                 officialauth
             }));
-        },
-        selectAuth: (auth) => {
-            dispatch(actions.selectedAuth({ auth }));
         },
         updateAuthToPass: (authlist, note) => {
             dispatch(actions.updateAuthToPass({
@@ -60,7 +57,9 @@ class AuthListController extends React.Component {
 
         this.state = {
             selectedRowKeys: [],
-            loading: false
+            loading: false,
+            authInfoModalAuth: undefined,
+            authInfoModalVisible: false
         };
 
         this.page = 1;
@@ -117,7 +116,7 @@ class AuthListController extends React.Component {
             },
             {
                 title: '状态',
-                width: 100,
+                width: 90,
                 dataIndex: 'authstate',
                 key: 'authstate',
                 align: 'center',
@@ -203,7 +202,7 @@ class AuthListController extends React.Component {
                 title: '申请时间',
                 dataIndex: 'createtime',
                 key: 'createtime',
-                width: 130,
+                width: 150,
                 align: 'center',
                 render: (createtime) => {
                     return <span>{LLCDateHelper.formatDate(createtime)}</span>
@@ -234,24 +233,30 @@ class AuthListController extends React.Component {
         this.props.queryAuthInfo(this.page, this.props.authstage, this.props.officialauth);
     }
 
-    okTapped(note) {
+    setAuthInfoModalVisible = (authInfoModalVisible = true) => {
+        this.setState({ authInfoModalVisible });
+    }
+
+    okTapped(note = '') {
         if (this.operate === 0) {
             this.props.updateAuthToPass(this.packageSelected(), note);
         } else if (this.operate === 1) {
             this.props.updateAuthToReject(this.packageSelected(), note);
         }
-
-        this.noteView && this.noteView.hide();
+        this.setState({ noteModalVisible: false });
+        this.noteInput.textAreaRef.value = '';
     }
 
     passTapped() {
         this.operate = 0;
-        this.noteView && this.noteView.show();
+        this.setState({ noteModalVisible: true });
+        // this.noteView && this.noteView.show();
     }
 
     rejectTapped() {
         this.operate = 1;
-        this.noteView && this.noteView.show();
+        this.setState({ noteModalVisible: true });
+        // this.noteView && this.noteView.show();
     }
 
     packageSelected() {
@@ -270,16 +275,13 @@ class AuthListController extends React.Component {
                 }
             }
         }
-
         return arr;
     }
 
     detailTapped(auth) {
-        this.props.selectAuth(auth);
-        this.props.history.push(PathConstants.kAuthinfoPath.path);
-        // router.push({
-        //     pathname: PathConstants.kAuthinfoPath.path
-        // });
+        // this.props.history.push(PathConstants.kAuthinfoPath.path);
+        this.setAuthInfoModalVisible(true);
+        this.setState({ authInfoModalAuth: auth });
     }
 
     selectRow(record) {
@@ -310,7 +312,6 @@ class AuthListController extends React.Component {
 
         return (
             <div>
-                {/* <div style={{ minHeight: 100 }} /> */}
                 <div
                     style={{
                         marginBottom: 16,
@@ -326,7 +327,7 @@ class AuthListController extends React.Component {
                         loading={loading}
                     >通过</Button>
                     <Button
-                        style={{ marginLeft: 25 }}
+                        style={{ marginLeft: 10 }}
                         type="danger"
                         onClick={this.rejectTapped}
                         disabled={!hasSelected}
@@ -337,7 +338,7 @@ class AuthListController extends React.Component {
                 <Table
                     rowSelection={rowSelection}
                     rowKey={record => record.userid}
-                    loading={this.props.loading}
+                    loading={loading}
                     columns={this.columns}
                     dataSource={this.props.authList}
                     scroll={{ x: 805, y: 460 }}
@@ -352,10 +353,35 @@ class AuthListController extends React.Component {
                         },
                     })}
                 />
-                <NoteView
-                    ref={noteView => this.noteView = noteView}
-                    okTapped={this.okTapped}
-                />
+                <Modal
+                    visible={this.state.noteModalVisible}
+                    title="填写备注"
+                    onOk={() => { this.okTapped(this.noteInput.textAreaRef.value) }}
+                    onCancel={() => { this.setState({ noteModalVisible: false }) }}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Input.TextArea
+                        ref={el => this.noteInput = el}
+                        style={{
+                            width: '100%',
+                            height: 150
+                        }}
+                    />
+                </Modal>
+                <Modal
+                    visible={this.state.authInfoModalVisible}
+                    footer={null}
+                    onCancel={() => this.setAuthInfoModalVisible(false)}
+                    width={975}
+                    style={{
+                        top: 20
+                    }}
+                >
+                    <AuthInfoController
+                        selectedAuth={this.state.authInfoModalAuth}
+                    />
+                </Modal>
             </div>
         );
     }

@@ -5,8 +5,6 @@ import { Link, Redirect, Route } from 'react-router-dom';
 import * as PathConstants from '../constants/routeConstants';
 import UserListController from './user/userListController';
 import AuthListController from './auth/authListController';
-import AuthInfoController from './auth/authInfoController';
-import UserInfoController from './user/userInfoController';
 
 const { Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -51,16 +49,12 @@ class BackgroundController extends React.Component {
                     </Menu>
                 </Sider>
                 <Layout>
-                    {/*<Header style={{background: '#fff', textAlign: 'center', padding: 0}}>Header</Header>*/}
-                    {/*style={{margin: '24px 16px 0'}}*/}
                     <Content>
                         <div style={{ padding: '24px', boxSizing: 'border-box', background: '#fff', minHeight: 360, minWidth: 1024 }}>
                             <Route path={PathConstants.kUserlistPath.path} component={UserListController} />
                             <Route path={PathConstants.kAuthlistPath.path} component={AuthListController} />
-                            <Route path={PathConstants.kAuthinfoPath.path} component={AuthInfoController} />
                         </div>
                     </Content>
-                    {/*<Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>*/}
                 </Layout>
             </Layout>
         );

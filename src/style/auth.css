@@ -1,0 +1,26 @@
+.authinfo .main-tag {
+    width: 80px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+}
+
+.authinfo .sub-tag {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
+.authinfo .card {
+    width: 450px;
+    margin-bottom: 25px;
+}
+
+.auth-modal-body {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+.auth-modal-body-column {
+    width: 450px;
+}

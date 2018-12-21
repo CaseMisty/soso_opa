@@ -7,11 +7,6 @@ import * as Apis from '../constants/apiConstants';
 
 import { launchPOSTRequest } from '../util/request';
 
-// let selectedUser = window.localStorage.getItem("selectedUser");
-// if (selectedUser) {
-//     selectedUser = JSON.parse(selectedUser);
-// }
-
 export const actions = {
     queryUserInfo: createAction('queryUserInfo'),
     selectedUser: createAction('selectedUser')
@@ -38,7 +33,6 @@ const effects = {
         }
     },
     *selectedUser({ payload }) {
-        // window.localStorage.setItem("selectedUser", JSON.stringify(payload.user));
         yield put(recordSelectedUser(payload.user));
     }
 }
@@ -52,10 +46,8 @@ export const watchers = {
     }
 };
 
-/* 
-    reducer
-    namespace: 'userlist' 
-*/
+
+// reducer
 export const userlist = handleActions(
     {
         recordUserList(state, { payload: result }) {
@@ -90,7 +82,3 @@ export const userlist = handleActions(
         selectedUser: undefined
     }
 );
-
-function onStateChange(state) {
-    console.log(state, '改变state');
-}
