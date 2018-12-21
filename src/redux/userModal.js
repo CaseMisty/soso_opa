@@ -7,10 +7,10 @@ import * as Apis from '../constants/apiConstants';
 
 import { launchPOSTRequest } from '../util/request';
 
-let selectedUser = window.localStorage.getItem("selectedUser");
-if (selectedUser) {
-    selectedUser = JSON.parse(selectedUser);
-}
+// let selectedUser = window.localStorage.getItem("selectedUser");
+// if (selectedUser) {
+//     selectedUser = JSON.parse(selectedUser);
+// }
 
 export const actions = {
     queryUserInfo: createAction('queryUserInfo'),
@@ -38,7 +38,7 @@ const effects = {
         }
     },
     *selectedUser({ payload }) {
-        window.localStorage.setItem("selectedUser", JSON.stringify(payload.user));
+        // window.localStorage.setItem("selectedUser", JSON.stringify(payload.user));
         yield put(recordSelectedUser(payload.user));
     }
 }
@@ -87,7 +87,7 @@ export const userlist = handleActions(
         pagesize: 0,
         totalpage: 0,
         page: 1,
-        selectedUser: selectedUser ? selectedUser : undefined
+        selectedUser: undefined
     }
 );
 

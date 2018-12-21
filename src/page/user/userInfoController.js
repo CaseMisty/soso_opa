@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, Col, Row, Tag } from 'antd';
 import { connect } from 'react-redux';
 import LLCDateHelper from "date-helper";
+import '../../style/user.css';
+import { actions } from '../../redux/userModal';
 
 const namespace = 'userlist';
 
@@ -14,7 +16,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        selectUser: (user) => {
+            dispatch(actions.selectedUser({ user }));
+        }
     };
 };
 
@@ -23,6 +27,12 @@ class UserInfoController extends React.Component {
         // if (!this.props.selectedUser) {
         //     router.push('/userlist');
         // }
+        // debugger;
+        this.props.selectUser(this.props.user);
+    }
+
+    componentDidUpdate() {
+        this.props.selectUser(this.props.user);
     }
 
     render() {
@@ -30,11 +40,12 @@ class UserInfoController extends React.Component {
             return (
                 <div style={{
                     display: 'flex',
-                    flexDirection: 'row'
+                    flexFlow: 'row wrap',
+                    justifyContent: 'space-around'
                 }}>
                     <Card
                         hoverable
-                        style={{width: 450}}
+                        className="user-card"
                         title="用户基础信息"
                     >
                         <div style={{
@@ -70,7 +81,7 @@ class UserInfoController extends React.Component {
 
                     <Card
                         hoverable
-                        style={{width: 450, marginLeft: 50}}
+                        className="user-card"
                         title="用户资料"
                     >
                         <div style={{
@@ -79,7 +90,8 @@ class UserInfoController extends React.Component {
                         }}>
                             {
                                 this.props.selectedUser.portrait ?
-                                    <img width='60px' src={this.props.selectedUser.portrait}/> : null
+                                    <img style={{ width: '60px', height: '60px' }} src={this.props.selectedUser.portrait} alt="" /> : 
+                                    null
                             }
                         </div>
                         <div style={{
@@ -108,6 +120,7 @@ class UserInfoController extends React.Component {
                         </div>
 
                     </Card>
+
                 </div>
             );
         } else {

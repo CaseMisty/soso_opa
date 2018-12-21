@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
 import NoteView from '../../view/noteView';
-import { actions } from '../../redux/authListModel';
+import { actions } from '../../redux/authModel';
 import AuthInfoController from './authInfoController';
 
 const namespace = 'authlist';
@@ -310,8 +310,7 @@ class AuthListController extends React.Component {
 
         return (
             <div>
-                <div style={{ minHeight: 100 }}>
-                </div>
+                {/* <div style={{ minHeight: 100 }} /> */}
                 <div
                     style={{
                         marginBottom: 16,

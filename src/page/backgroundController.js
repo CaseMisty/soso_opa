@@ -9,8 +9,7 @@ import AuthInfoController from './auth/authInfoController';
 import UserInfoController from './user/userInfoController';
 
 const { Sider, Content } = Layout;
-const SubMenu = Menu.SubMenu; // 引入子菜单组件
-const namespace = 'login';
+const SubMenu = Menu.SubMenu;
 
 class BackgroundController extends React.Component {
 
@@ -19,11 +18,9 @@ class BackgroundController extends React.Component {
             <Layout>
                 <Sider
                     collapsible={true}
-                    width={256}
-                    style={{ minHeight: '100vh' }}>
+                    style={{ minHeight: '100vh', width: '256px' }}>
                     <div style={{ height: '32px', background: 'rgba(255,255,255,.2)', margin: '16px' }} />
                     <Menu
-                        // defaultOpenKeys="sub1"
                         theme="dark"
                         mode="inline"
                         defaultSelectedKeys={['/' + this.props.match.params.rootPath]}
@@ -57,9 +54,8 @@ class BackgroundController extends React.Component {
                     {/*<Header style={{background: '#fff', textAlign: 'center', padding: 0}}>Header</Header>*/}
                     {/*style={{margin: '24px 16px 0'}}*/}
                     <Content>
-                        <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+                        <div style={{ padding: '24px', boxSizing: 'border-box', background: '#fff', minHeight: 360, minWidth: 1024 }}>
                             <Route path={PathConstants.kUserlistPath.path} component={UserListController} />
-                            <Route path={PathConstants.kUserinfoPath.path} component={UserInfoController} />
                             <Route path={PathConstants.kAuthlistPath.path} component={AuthListController} />
                             <Route path={PathConstants.kAuthinfoPath.path} component={AuthInfoController} />
                         </div>

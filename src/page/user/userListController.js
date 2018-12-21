@@ -1,13 +1,14 @@
 import React from 'react';
 import {
     Table,
-    Button
+    Button,
+    Modal
 } from 'antd';
 import { connect } from 'react-redux';
-import { Layout } from "antd/lib/index";
 import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
-import { actions } from '../../redux/userListModal';
+import { actions } from '../../redux/userModal';
+import UserInfoController from './userInfoController';
 
 const namespace = 'userlist';
 
@@ -26,9 +27,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         queryUserInfo: (page) => {
             dispatch(actions.queryUserInfo({ page }));
-        },
-        selectUser: (user) => {
-            dispatch(actions.selectedUser({ user }));
         }
     };
 };
@@ -127,52 +125,65 @@ class UserListController extends React.Component {
                 // fixed: 'right',
                 width: 120,
                 align: 'center',
-                render: (user) => {
-                    return (
-                        <Button
-                            onClick={(e) => {
-                                this.detailTapped(user);
-                            }}
-                            type={'default'}
-                            size={'default'}
-                        >详情</Button>
-                    );
-                }
-            },
+                render: (user) => (
+                    <Button
+                        onClick={(e) => {
+                            this.detailTapped(user);
+                        }}
+                        type={'default'}
+                        size={'default'}
+                    >详情</Button>)
+            }
+            ,
         ];
         this.page = 1;
-        this.detailTapped = this.detailTapped.bind(this);
+        this.state = {
+            userInfoModalVisible: false,
+            userInfoModalUser: undefined
+        };
     }
 
     componentDidMount() {
         this.props.queryUserInfo(this.page);
     }
 
-    detailTapped(user) {
-        this.props.selectUser(user);
-        this.props.history.push(PathConstants.kUserinfoPath.path);
-        // router.push({
-        //     pathname: PathConstants.kUserinfoPath.path
-        // });
+    setUserInfoModalVisible = (userInfoModalVisible = true) => {
+        this.setState({ userInfoModalVisible });
+    }
+
+    detailTapped = (user) => {
+        // this.props.history.push(PathConstants.kUserinfoPath.path);
+        this.setUserInfoModalVisible(true);
+        this.setState({ userInfoModalUser: user });
     }
 
     render() {
         return (
-            <div>
-                <div style={{ minHeight: 100 }}>
-                </div>
+            <div style={{ height: '100vh' }} >
                 <Table
                     rowKey={record => record.userid}
                     loading={this.props.loading}
                     columns={this.columns}
                     dataSource={this.props.userList}
-                    scroll={{ x: 805, y: 460 }}
+                    scroll={{ y: 560 }}
                     pagination={{
                         total: this.props.totalpage * this.props.pagesize,
                         pageSize: this.props.pagesize,
                         current: this.props.page
                     }}
                 />
+                <Modal
+                    visible={this.state.userInfoModalVisible}
+                    footer={null}
+                    onCancel={() => this.setUserInfoModalVisible(false)}
+                    width={1024}
+                    style={{
+                    }}
+                >
+                    <UserInfoController
+                        user={this.state.userInfoModalUser}
+                    />
+                </Modal>
             </div>
         );
     }

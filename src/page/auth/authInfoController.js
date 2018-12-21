@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Col, Row, Tag, Affix } from 'antd';
 import { connect } from 'react-redux';
-import { actions } from '../../redux/authListModel';
+import { actions } from '../../redux/authModel';
 
 const namespace = 'authlist';
 

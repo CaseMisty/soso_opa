@@ -4,8 +4,8 @@ import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { watchers as loginWatcher, loginStore } from './loginModel';
-import { watchers as userListWatcher, userlist } from './userListModal';
-import { watchers as authListWatcher, authlist } from './authListModel';
+import { watchers as userListWatcher, userlist } from './userModal';
+import { watchers as authListWatcher, authlist } from './authModel';
 
 function* rootSaga() {
   yield all([
