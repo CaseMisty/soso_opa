@@ -22,13 +22,13 @@ const loadingChanged = createAction('loadingChanged');
 const recordAuthList = createAction('recordAuthList');
 
 const effects = {
-    *queryAuthInfo({ payload: action }) {
+    *queryAuthInfo({ payload }) {
         yield put(loadingChanged({ loading: true }));
 
         const params = {
-            page: action.page,
-            authstage: action.authstage,
-            officialauth: action.officialauth
+            page: payload.page,
+            authstage: payload.authstage,
+            officialauth: payload.officialauth
         };
         const response = yield call(launchPOSTRequest, Apis.kUrl_QueryAuthInfo, params);
 
@@ -43,12 +43,12 @@ const effects = {
             message.error(response.msg);
         }
     },
-    *updateAuthToPass({ payload: action }) {
+    *updateAuthToPass({ payload }) {
         yield put(loadingChanged({ loading: true }));
 
         const params = {
-            authlist: action.authlist,
-            note: action.note
+            authlist: payload.authlist,
+            note: payload.note
         };
         const response = yield call(launchPOSTRequest, Apis.kUrl_UpdateAuthToPass, params);
 
@@ -63,12 +63,12 @@ const effects = {
             message.error(response.msg);
         }
     },
-    *updateAuthToReject({ payload: action }) {
+    *updateAuthToReject({ payload }) {
         yield put(loadingChanged({ loading: true }));
 
         const params = {
-            authlist: action.authlist,
-            note: action.note
+            authlist: payload.authlist,
+            note: payload.note
         };
         const response = yield call(launchPOSTRequest, Apis.kUrl_UpdateAuthToReject, params);
 
@@ -83,11 +83,11 @@ const effects = {
             message.error(response.msg);
         }
     },
-    *queryChangePending({ payload: action }) {
+    *queryChangePending({ payload }) {
         yield put(loadingChanged({ loading: true }));
 
         const params = {
-            userid: action.userid
+            userid: payload.userid
         };
 
         const response = yield call(launchPOSTRequest, Apis.kUrl_QueryChangePending, params);
@@ -103,9 +103,10 @@ const effects = {
             message.error(response.msg);
         }
     },
-    *selectedAuth({ payload: action }) {
-        window.localStorage.setItem("selectedAuth", JSON.stringify(action.auth));
-        yield put({ type: 'recordSelectedAuth', payload: action.auth });
+    *selectedAuth({ payload }) {
+        debugger
+        window.localStorage.setItem("selectedAuth", JSON.stringify(payload.auth));
+        yield put({ type: 'recordSelectedAuth', payload: payload.auth });
     }
 }
 

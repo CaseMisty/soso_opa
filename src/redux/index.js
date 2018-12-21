@@ -3,13 +3,13 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { watchLaunchLoginRequest, loginStore } from './loginModel';
+import { watchers as loginWatcher, loginStore } from './loginModel';
 import { watchers as userListWatcher, userlist } from './userListModal';
 import { watchers as authListWatcher, authlist } from './authListModel';
 
 function* rootSaga() {
   yield all([
-    watchLaunchLoginRequest(),
+    loginWatcher.launchLoginRequest(),
 
     userListWatcher.queryUserInfo(),
     userListWatcher.selectedUser(),

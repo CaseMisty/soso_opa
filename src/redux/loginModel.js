@@ -12,32 +12,38 @@ if (user) {
     user = {};
 }
 
-// actions
-export const loginRequestAction = createAction('login/launchLoginRequest');
+export const actions = {
+    loginRequest: createAction('login/launchLoginRequest')
+};
 const loginSuccessed = createAction('loginSuccessed');
 
-// effects
-function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
-    const params = {
-        accountname,
-        passwd
-    };
-    const response = yield call(launchPOSTRequest, Apis.kUrl_ManagerLogin, params);
+const effects = {
+    launchLoginRequest: function* ({ payload: { accountname, passwd }, type }) {
+        const params = {
+            accountname,
+            passwd
+        };
+        const response = yield call(launchPOSTRequest, Apis.kUrl_ManagerLogin, params);
 
-    if (
-        response.responseData.succ === kParams_ResponseCode.success &&
-        response.responseData.result.status === kParams_ServiceCode.Successed
-    ) {
-        window.localStorage.setItem("user", JSON.stringify(response.responseData.result));
+        if (
+            response.responseData.succ === kParams_ResponseCode.success &&
+            response.responseData.result.status === kParams_ServiceCode.Successed
+        ) {
+            window.localStorage.setItem("user", JSON.stringify(response.responseData.result));
 
-        yield put(loginSuccessed(response.responseData.result));
-        console.log('登录成功');
-    } else {
-        console.error('登录失败');
+            yield put(loginSuccessed(response.responseData.result));
+            console.log('登录成功');
+        } else {
+            console.error('登录失败');
+        }
     }
-}
-export function* watchLaunchLoginRequest() {
-    yield takeLatest(loginRequestAction, launchLoginRequest);
+
+};
+
+export const watchers = {
+    *launchLoginRequest() {
+        yield takeLatest(actions.loginRequest, effects.launchLoginRequest);
+    }
 }
 
 /* 

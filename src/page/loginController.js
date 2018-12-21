@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { loginRequestAction } from '../redux/loginModel';
+import { actions } from '../redux/loginModel';
 import * as PathConstants from '../constants/routeConstants';
 
 const FormItem = Form.Item;
@@ -98,7 +98,7 @@ const mapStateToProps = ({ loginStore: { loginState } }) => {
 };
 const mapDispatchToProps = (dispatch) => ({
     login(accountname, passwd) {
-        dispatch(loginRequestAction({ accountname, passwd }));
+        dispatch(actions.loginRequest({ accountname, passwd }));
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginController));

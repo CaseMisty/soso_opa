@@ -9,6 +9,7 @@ import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
 import NoteView from '../../view/noteView';
 import { actions } from '../../redux/authListModel';
+import AuthInfoController from './authInfoController';
 
 const namespace = 'authlist';
 
@@ -35,10 +36,7 @@ const mapDispatchToProps = (dispatch) => {
             }));
         },
         selectAuth: (auth) => {
-            dispatch(actions.selectedAuth({
-                type: `${namespace}/selectedAuth`,
-                auth
-            }));
+            dispatch(actions.selectedAuth({ auth }));
         },
         updateAuthToPass: (authlist, note) => {
             dispatch(actions.updateAuthToPass({
@@ -278,6 +276,7 @@ class AuthListController extends React.Component {
 
     detailTapped(auth) {
         this.props.selectAuth(auth);
+        this.props.history.push(PathConstants.kAuthinfoPath.path);
         // router.push({
         //     pathname: PathConstants.kAuthinfoPath.path
         // });

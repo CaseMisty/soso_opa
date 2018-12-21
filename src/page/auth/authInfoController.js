@@ -1,10 +1,7 @@
 import React from 'react';
 import { Card, Col, Row, Tag, Affix } from 'antd';
-import { connect } from 'dva';
-import {Layout} from "antd/lib/index";
-import LLCDateHelper from "date-helper";
-import router from "../.umi/router";
-const { Header, Footer, Sider, Content } = Layout;
+import { connect } from 'react-redux';
+import { actions } from '../../redux/authListModel';
 
 const namespace = 'authlist';
 
@@ -19,16 +16,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         queryChangePending: (userid) => {
-            dispatch({
-                type: `${namespace}/queryChangePending`,
-                userid
-            });
+            dispatch(actions.queryChangePending({ userid}));
         }
     };
 };
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class LoginController extends React.Component {
+class AuthInfoController extends React.Component {
     constructor(props) {
         super(props);
 
@@ -152,18 +145,19 @@ export default class LoginController extends React.Component {
                             <p>{this.props.selectedAuth.username ? this.props.selectedAuth.username : '-'}</p>
                             <p>{this.props.selectedAuth.uidentifier ? this.props.selectedAuth.uidentifier : '-'}</p>
                             <img
+                                alt=""
                                 style={{
                                     width: 300
                                 }}
                                 src={this.props.selectedAuth.uidfrontthumb} />
 
-                            <img
+                            <img alt=""
                                 style={{
                                     marginTop: 25,
                                     width: 300
                                 }}
                                 src={this.props.selectedAuth.uidbackthumb} />
-                            <img
+                            <img alt=""
                                 style={{
                                     marginTop: 25,
                                     width: 300
@@ -350,3 +344,4 @@ export default class LoginController extends React.Component {
         }
     }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(AuthInfoController);
