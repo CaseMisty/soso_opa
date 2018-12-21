@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect, Route } from 'react-router-dom';
 import * as PathConstants from '../constants/routeConstants';
 import UserListController from './user/userListController';
+import AuthListController from './auth/authListController';
 
 const { Sider, Content } = Layout;
 const SubMenu = Menu.SubMenu; // 引入子菜单组件
@@ -56,6 +57,7 @@ class BackgroundController extends React.Component {
           <Content>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               <Route path={PathConstants.kUserlistPath.path} component={UserListController} />
+              <Route path={PathConstants.kAuthlistPath.path} component={AuthListController} />
             </div>
           </Content>
           {/*<Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>*/}

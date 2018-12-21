@@ -4,13 +4,11 @@ import {
     Button,
     Tag
 } from 'antd';
-import { connect } from 'dva';
-import {Layout} from "antd/lib/index";
-import LLCDateHelper from "../../util/dateHelper";
-import router from "umi/router";
+import { connect } from 'react-redux';
+import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
 import NoteView from '../../view/noteView';
-const { Header, Footer, Sider, Content } = Layout;
+import { actions } from '../../redux/authListModel';
 
 const namespace = 'authlist';
 
@@ -29,39 +27,35 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        queryAuthInfo: (page, authstage, officialauth) => {
-            dispatch({
-                type: `${namespace}/queryAuthInfo`,
+        queryAuthInfo(page, authstage, officialauth) {
+            dispatch(actions.queryAuthInfo({
                 page,
                 authstage,
                 officialauth
-            });
+            }));
         },
         selectAuth: (auth) => {
-            dispatch({
+            dispatch(actions.selectedAuth({
                 type: `${namespace}/selectedAuth`,
                 auth
-            });
+            }));
         },
         updateAuthToPass: (authlist, note) => {
-            dispatch({
-                type: `${namespace}/updateAuthToPass`,
+            dispatch(actions.updateAuthToPass({
                 authlist,
                 note
-            });
+            }));
         },
         updateAuthToReject: (authlist, note) => {
-            dispatch({
-                type: `${namespace}/updateAuthToReject`,
+            dispatch(actions.updateAuthToReject({
                 authlist,
                 note
-            });
+            }));
         }
     };
 };
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class LoginController extends React.Component {
+class AuthListController extends React.Component {
 
     constructor(props) {
         super(props);
@@ -284,9 +278,9 @@ export default class LoginController extends React.Component {
 
     detailTapped(auth) {
         this.props.selectAuth(auth);
-        router.push({
-            pathname: PathConstants.kAuthinfoPath.path
-        });
+        // router.push({
+        //     pathname: PathConstants.kAuthinfoPath.path
+        // });
     }
 
     selectRow(record) {
@@ -334,7 +328,7 @@ export default class LoginController extends React.Component {
                         loading={loading}
                     >通过</Button>
                     <Button
-                        style={{marginLeft: 25}}
+                        style={{ marginLeft: 25 }}
                         type="danger"
                         onClick={this.rejectTapped}
                         disabled={!hasSelected}
@@ -350,7 +344,7 @@ export default class LoginController extends React.Component {
                     dataSource={this.props.authList}
                     scroll={{ x: 805, y: 460 }}
                     pagination={{
-                        total: this.props.totalpage*this.props.pagesize,
+                        total: this.props.totalpage * this.props.pagesize,
                         pageSize: this.props.pagesize,
                         current: this.props.page
                     }}
@@ -368,3 +362,4 @@ export default class LoginController extends React.Component {
         );
     }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(AuthListController);

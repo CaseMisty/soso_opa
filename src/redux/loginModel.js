@@ -5,8 +5,18 @@ import * as Apis from '../constants/apiConstants';
 import { kParams_ResponseCode, kParams_ServiceCode } from "../constants/dominConstants";
 import { launchPOSTRequest } from '../util/request';
 
-export const loginRequestAction = createAction('login/launchLoginRequest');
+let user = window.localStorage.getItem("user");
+if (user) {
+    user = JSON.parse(user);
+} else {
+    user = {};
+}
 
+// actions
+export const loginRequestAction = createAction('login/launchLoginRequest');
+const loginSuccessed = createAction('loginSuccessed');
+
+// effects
 function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
     const params = {
         accountname,
@@ -20,7 +30,7 @@ function* launchLoginRequest({ payload: { accountname, passwd }, type }) {
     ) {
         window.localStorage.setItem("user", JSON.stringify(response.responseData.result));
 
-        yield put({ type: 'loginSuccessed', payload: response.responseData.result });
+        yield put(loginSuccessed(response.responseData.result));
         console.log('登录成功');
     } else {
         console.error('登录失败');
@@ -30,23 +40,14 @@ export function* watchLaunchLoginRequest() {
     yield takeLatest(loginRequestAction, launchLoginRequest);
 }
 
-let user = window.localStorage.getItem("user");
-if (user) {
-    user = JSON.parse(user);
-} else {
-    user = {};
-}
-
 /* 
-    loginResult有五个字段
-    username
-    accesstoken
-    userid
-    refreshtoken
-    portrait
+    reducer
+
+    loginResult五个字段: 
+    username accesstoken userid refreshtoken portrait
 */
 export const loginStore = handleAction(
-    'loginSuccessed',
+    loginSuccessed,
     (state, { payload: loginResult }) => {
         return {
             ...state,

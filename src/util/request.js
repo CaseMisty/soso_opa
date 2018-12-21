@@ -1,5 +1,5 @@
 import * as DominConfigs from '../constants/dominConstants';
-import LLCDateHelper from './dateHelper';
+import LLCDateHelper from 'date-helper';
 var forge = require('node-forge');
 
 function checkStatus(response) {

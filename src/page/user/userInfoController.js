@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Col, Row, Tag } from 'antd';
 import { connect } from 'dva';
 import {Layout} from "antd/lib/index";
-import LLCDateHelper from "../../util/dateHelper";
+import LLCDateHelper from "date-helper";
 import router from "../.umi/router";
 const { Header, Footer, Sider, Content } = Layout;
 

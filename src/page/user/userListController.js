@@ -5,41 +5,34 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import { Layout } from "antd/lib/index";
-import LLCDateHelper from "../../util/dateHelper";
-// import router from "umi/router";
+import LLCDateHelper from "date-helper";
 import * as PathConstants from "../../constants/routeConstants";
-const { Header, Footer, Sider, Content } = Layout;
+import { actions } from '../../redux/userListModal';
 
 const namespace = 'userlist';
 
 const mapStateToProps = (state) => {
     const userinfoData = state[namespace];
-    // return {
-    //     loading: userinfoData.loading,
-    //     userList: userinfoData.userList,
-    //     pagesize: userinfoData.pagesize,
-    //     totalpage: userinfoData.totalpage,
-    //     page: userinfoData.totalpage
-    // };
+    return {
+        loading: userinfoData.loading,
+        userList: userinfoData.userList,
+        pagesize: userinfoData.pagesize,
+        totalpage: userinfoData.totalpage,
+        page: userinfoData.totalpage
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         queryUserInfo: (page) => {
-            dispatch({
-                type: `${namespace}/queryUserInfo`,
-                page
-            });
+            dispatch(actions.queryUserInfo({ page }));
         },
         selectUser: (user) => {
-            dispatch({
-                type: `${namespace}/selectedUser`,
-                user
-            });
+            dispatch(actions.selectedUser({ user }));
         }
     };
 };
-class LoginController extends React.Component {
+class UserListController extends React.Component {
     constructor(props) {
         super(props);
 
@@ -66,9 +59,9 @@ class LoginController extends React.Component {
                 key: 'portrait',
                 width: 70,
                 align: 'center',
-                render: (portrait) =>{
+                render: (portrait) => {
                     if (portrait) {
-                        return <img width='35px' src={portrait} />;
+                        return <img width='35px' src={portrait} alt="" />;
                     } else {
                         return null;
                     }
@@ -147,9 +140,7 @@ class LoginController extends React.Component {
                 }
             },
         ];
-
         this.page = 1;
-
         this.detailTapped = this.detailTapped.bind(this);
     }
 
@@ -171,14 +162,14 @@ class LoginController extends React.Component {
                 </div>
                 <Table
                     rowKey={record => record.userid}
-                    // loading={this.props.loading}
+                    loading={this.props.loading}
                     columns={this.columns}
-                    // dataSource={this.props.userList}
+                    dataSource={this.props.userList}
                     scroll={{ x: 805, y: 460 }}
                     pagination={{
-                        // total: this.props.totalpage*this.props.pagesize,
-                        // pageSize: this.props.pagesize,
-                        // current: this.props.page
+                        total: this.props.totalpage * this.props.pagesize,
+                        pageSize: this.props.pagesize,
+                        current: this.props.page
                     }}
                 />
             </div>
@@ -186,4 +177,4 @@ class LoginController extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginController);
+export default connect(mapStateToProps, mapDispatchToProps)(UserListController);
