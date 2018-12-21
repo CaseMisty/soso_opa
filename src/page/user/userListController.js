@@ -150,6 +150,7 @@ class UserListController extends React.Component {
 
     detailTapped(user) {
         this.props.selectUser(user);
+        this.props.history.push(PathConstants.kUserinfoPath.path);
         // router.push({
         //     pathname: PathConstants.kUserinfoPath.path
         // });

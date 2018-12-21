@@ -1,10 +1,7 @@
 import React from 'react';
 import { Card, Col, Row, Tag } from 'antd';
-import { connect } from 'dva';
-import {Layout} from "antd/lib/index";
+import { connect } from 'react-redux';
 import LLCDateHelper from "date-helper";
-import router from "../.umi/router";
-const { Header, Footer, Sider, Content } = Layout;
 
 const namespace = 'userlist';
 
@@ -21,12 +18,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class LoginController extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
+class UserInfoController extends React.Component {
     componentDidMount() {
         // if (!this.props.selectedUser) {
         //     router.push('/userlist');
@@ -123,3 +115,4 @@ export default class LoginController extends React.Component {
         }
     }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfoController);
